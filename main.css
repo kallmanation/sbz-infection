@@ -1,0 +1,39 @@
+* {
+  background: var(--background-color);
+  color: var(--foreground-color);
+}
+
+/* animated fade message */
+@-webkit-keyframes fademessagebackground {
+  0%, 99% { width: 100vw; height: 100vh; }
+  100% { width: 0; height: 0; }
+}
+@keyframes fademessagebackground {
+  0%, 99% { width: 100vw; height: 100vh; }
+  100% { width: 0; height: 0; }
+}
+
+@-webkit-keyframes fademessagetext {
+  0%, 99%, 100% { opacity: 0; }
+  40%, 50% { opacity: 1; }
+}
+@keyframes fademessagetext {
+  0%, 99%, 100% { opacity: 0; }
+  40%, 50% { opacity: 1; }
+}
+
+section.fade-message {
+  -webkit-animation: fademessagebackground var(--fade-message-length) linear forwards;
+  animation: fademessagebackground var(--fade-message-length) linear forwards;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+section.fade-message * {
+  -webkit-animation: fademessagetext var(--fade-message-length) linear forwards;
+  animation: fademessagetext var(--fade-message-length) linear forwards;
+  text-align: center;
+  margin-top: 30vmin;
+}
