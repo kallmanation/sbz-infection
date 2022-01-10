@@ -1,5 +1,7 @@
 import { randomReference } from './_utils/references'
 
+const faunadb = require('faunadb'), q = faunadb.query
+
 module.exports = (req, res) => {
   // TODO: move fauna stuff to a single place
   const store = new faunadb.Client({ secret: process.env.FAUNA_DB_KEY, domain: 'db.us.fauna.com', keepAlive: false })
