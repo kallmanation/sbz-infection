@@ -23,6 +23,7 @@ module.exports = (req, res) => {
 
   createP.then((response) => {
     // res.status(200).send(`Hello ${process.env.FAUNA_DB_KEY} -  ${JSON.stringify(response)} - ${JSON.stringify(newGameEvent)}!`);
-    res.status(200).send(`<html><head><title>Creating Game</title></head><body>${JSON.stringify(response)}</body></html>`);
+    // res.status(200).send(`<html><head><title>Creating Game</title></head><body>${JSON.stringify(response)}</body></html>`);
+    res.status(303).location(`/api/${newGameEvent.game_ref}`)
   });
 };
