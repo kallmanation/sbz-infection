@@ -4,9 +4,10 @@ const faunadb = require('faunadb'), q = faunadb.query
 
 module.exports = (req, res) => {
   // TODO: move events to a single place
+  const player = randomReference(); // TODO: this should default to current cookie
   const newGameEvent = {
     game_ref: randomReference(),
-    sent_by: randomReference(), // TODO: this should default to current cookie
+    sent_by: player,
     event_ref: randomReference(), // TODO: this should actually be sent by the form
     event_type: 'new_game',
     nickname: 'Hardcoded Test' // TODO: this should actually be sent by the form
@@ -24,6 +25,6 @@ module.exports = (req, res) => {
   createP.then((response) => {
     // res.status(200).send(`Hello ${process.env.FAUNA_DB_KEY} -  ${JSON.stringify(response)} - ${JSON.stringify(newGameEvent)}!`);
     // res.status(200).send(`<html><head><title>Creating Game</title></head><body>${JSON.stringify(response)}</body></html>`);
-    res.status(303).location(`/api/${newGameEvent.game_ref}`)
+    res.status(303).setHeader('Location', `/api/${newGameEvent.game_ref}`).setHeader('Set-Cookie', `SbzPlayerRef=${player}; HttpOnly`);
   });
 };
