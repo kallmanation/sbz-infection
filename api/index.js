@@ -4,13 +4,13 @@ const faunadb = require('faunadb'), q = faunadb.query
 
 module.exports = (req, res) => {
   // TODO: move events to a single place
-  const player = randomReference(); // TODO: this should default to current cookie
+  const player = req.cookies.SbzPlayerRef || randomReference();
   const newGameEvent = {
     game_ref: randomReference(),
     sent_by: player,
-    event_ref: randomReference(), // TODO: this should actually be sent by the form
+    event_ref: randomReference(),
     event_type: 'new_game',
-    nickname: 'Hardcoded Test' // TODO: this should actually be sent by the form
+    nickname: req.body.nickname
   };
 
   // TODO: move fauna to a single place
