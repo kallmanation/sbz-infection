@@ -7,12 +7,6 @@ export default async (req, res) => {
   const player = req.cookies.SbzPlayerRef || randomReference();
   const ref = randomReference()
 
-  // TODO: common DB
-  // const connection = await mysql.createConnection(`mysql://${process.env.PLANETSCALE_DB_USERNAME}:${process.env.PLANETSCALE_DB_PASSWORD}@${process.env.PLANETSCALE_DB_HOST}/${process.env.PLANETSCALE_DB}?ssl={"rejectUnauthorized":true}`);
-  // const [rows, fields] = await connection.execute(
-  //   "INSERT INTO `game_events` (`ref`, `game_ref`, `type`, `sent_by`, `sent_at`, `data`) VALUES (?, ?, ?, ?, ?, ?)",
-  //   [ref, ref, events.NEW_GAME, player, new Date(), { nickname: req.body.nickname }]
-  // );
   const [rows, fields] = await insertGameEvent({
     ref,
     game_ref: ref,

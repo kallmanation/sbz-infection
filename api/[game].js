@@ -1,5 +1,5 @@
 import { randomReference } from './_utils/references'
-import { selectGameEventsForGameRef } from './_utils/planetscale'
+import { project_from_planetscale } from './_utils/game_projector'
 
 export default async (req, res) => {
   // TODO: DRY player finding?
@@ -12,8 +12,8 @@ export default async (req, res) => {
   //   [req.query.game]
   // );
 
-  const [rows, fields] = await selectGameEventsForGameRef(req.query.game);
+  const game_state = await project_from_planetscale(req.query.game);
 
   res.status(200);
-  res.send(rows);
+  res.send(game_state);
 };

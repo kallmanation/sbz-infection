@@ -10,6 +10,6 @@ export const insertGameEvent = async ({ ref, game_ref, type, sent_by, ...data })
 );
 
 export const selectGameEventsForGameRef = async (game_ref) => await (await createConnection()).execute(
-  "SELECT * FROM `game_events` WHERE `game_ref` = ?",
+  "SELECT * FROM `game_events` WHERE `game_ref` = ? ORDER BY `sent_at`, `ref` ASC",
   [game_ref]
 );

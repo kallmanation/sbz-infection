@@ -1,3 +1,5 @@
+import { selectGameEventsForGameRef } from './planetscale'
+
 export const events = {
   NEW_GAME: 'new_game',
   JOIN_GAME: 'join_game',
@@ -31,6 +33,11 @@ const default_game_state = {
   }
 };
 
+export async function project_from_planetscale(game_ref) {
+  const [rows, fields] = await selectGameEventsForGameRef(game_ref);
+  return project_game_state(rows);
+}
+
 export function project_game_state(game_events, previous_game_state = default_game_state) {
   switch(game_events?.length) {
     case undefined:
@@ -49,11 +56,11 @@ export function project_game_state(game_events, previous_game_state = default_ga
 
 const phaseProjector = {
   [phases.INIT]: (game_event, previous_game_state) => {
-    switch(game_event.event_type) {
+    switch(game_event.type) {
       case events.NEW_GAME:
         const gamemaster_ref = game_event.sent_by;
         let players = {};
-        players[gamemaster_ref] = game_event.nickname;
+        players[gamemaster_ref] = game_event.data.nickname;
         return {
           ...previous_game_state,
           phase: phases.JOINING,
@@ -65,10 +72,10 @@ const phaseProjector = {
     }
   },
   [phases.JOINING]: (game_event, previous_game_state) => {
-    switch(game_event.event_type) {
+    switch(game_event.type) {
       case events.JOIN_GAME:
         let players = previous_game_state.players;
-        players[game_event.sent_by] = game_event.nickname;
+        players[game_event.sent_by] = game_event.data.nickname;
         return {
           ...previous_game_state,
           players: players,
@@ -83,37 +90,37 @@ const phaseProjector = {
     }
   },
   [phases.SETUP]: (game_event, previous_game_state) => {
-    switch(game_event.event_type) {
+    switch(game_event.type) {
       default:
         return previous_game_state;
     }
   },
   [phases.INFECTING]: (game_event, previous_game_state) => {
-    switch(game_event.event_type) {
+    switch(game_event.type) {
       default:
         return previous_game_state;
     }
   },
   [phases.DAY_PLANNING]: (game_event, previous_game_state) => {
-    switch(game_event.event_type) {
+    switch(game_event.type) {
       default:
         return previous_game_state;
     }
   },
   [phases.HIVEMIND_PLANNING]: (game_event, previous_game_state) => {
-    switch(game_event.event_type) {
+    switch(game_event.type) {
       default:
         return previous_game_state;
     }
   },
   [phases.VOTING]: (game_event, previous_game_state) => {
-    switch(game_event.event_type) {
+    switch(game_event.type) {
       default:
         return previous_game_state;
     }
   },
   [phases.VICTORY]: (game_event, previous_game_state) => {
-    switch(game_event.event_type) {
+    switch(game_event.type) {
       default:
         return previous_game_state;
     }
