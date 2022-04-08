@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "faunadb": "^4.4.1"
+    "faunadb": "^4.4.1",
+    "mysql2": "^2.3.3"
   }
 }
