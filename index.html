@@ -3,14 +3,7 @@
     <title>SBZ Infection</title>
     <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="/defaults.css" rel="stylesheet" />
-    <style>
-      :root {
-        --fade-message-length: 3s;
-      }
-    </style>
     <link href="/main.css" rel="stylesheet" />
-  </head>
-  <body>
     <section class="fade-message">
       <h1>Welcome</h1>
     </section>
@@ -18,9 +11,8 @@
     <form action="/play" method="post">
       <label>
         Your Nickname:
-        <input type="text" name="nickname" />
+        <input type="text" name="nickname">
       </label>
-      <input type="submit" value="Start New Game"/>
+      <input type="hidden" name="type" value="new_game">
+      <input type="submit" name="submit" value="Start New Game">
     </form>
-  </body>
-</html>

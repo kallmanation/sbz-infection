@@ -5,17 +5,24 @@ import { project_from_planetscale } from './_utils/game_projector'
 import render from './_scenes/render'
 
 export default async (req, res) => {
-  // TODO: DRY player finding?
   const player = req.cookies.SbzPlayerRef || randomReference();
 
   if (req.body?.type) {
+    const ref = randomReference();
+    const game_ref = req.query.game || ref;
     const common_data = {
-      ref: randomReference(),
-      game_ref: req.query.game,
+      ref: ref,
+      game_ref: game_ref,
       type: req.body.type,
       sent_by: player,
     };
     switch(req.body.type) {
+      case events.NEW_GAME:
+        await insertGameEvent({
+          ...common_data,
+          nickname: req.body.nickname,
+        });
+        break;
       case events.JOIN_GAME:
         await insertGameEvent({
           ...common_data,
@@ -41,9 +48,9 @@ export default async (req, res) => {
         });
     }
     res.status(303);
-    res.setHeader('Location', `/play/${req.query.game}`);
+    res.setHeader('Location', `/play/${game_ref}`);
     res.setHeader('Set-Cookie', `SbzPlayerRef=${player}; HttpOnly`);
-    res.send(`Redirecting to /play/${req.query.game}`);
+    res.send(`Redirecting to /play/${game_ref}`);
   } else {
     const game_state = await project_from_planetscale(req.query.game);
     res.status(200);
