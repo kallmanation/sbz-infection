@@ -1,4 +1,5 @@
 :root {
   --background-color: black;
   --foreground-color: white;
+  --fade-message-length: 1s;
 }

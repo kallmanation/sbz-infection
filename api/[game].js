@@ -32,12 +32,13 @@ export default async (req, res) => {
   const head_template = readFile(`${__dirname}/_templates/head.html`);
   const game_state = await projection;
 
-  const player_list = Object.values(game_state['players']);
+  const player_list = Object.values(game_state['players']).map((nickname) => `<li>${nickname}</li>`).join('');
 
   if (player in game_state['players']) {
     res.status(200);
     res.send(
       (await head_template).toString() +
+      '<meta http-equiv="refresh" content="7">' +
       '<section class="fade-message"><h1>Waiting for players to join...</h1></section>' +
       '<h2>Players:</h2>' +
       `<ul>${player_list}</ul>` +
@@ -48,6 +49,7 @@ export default async (req, res) => {
     res.setHeader('Set-Cookie', `SbzPlayerRef=${player}; HttpOnly`);
     res.send(
       (await head_template).toString() +
+      '<meta http-equiv="refresh" content="7">' +
       `<form method="post"><label>Nickname:<input type="text" name="nickname" /></label><input type="hidden" name="type" value="${events.JOIN_GAME}" /><input type="submit" value="Join" /></form>`
     );
   }

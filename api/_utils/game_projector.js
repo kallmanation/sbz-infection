@@ -43,14 +43,10 @@ export function project_game_state(game_events, previous_game_state = default_ga
     case undefined:
     case 0:
       return previous_game_state;
-    case 1:
-      return phaseProjector[previous_game_state.phase](game_events[0], previous_game_state);
     default:
-      let last_game_state = previous_game_state;
-      for (const game_event in game_events) {
-        last_game_state = project_game_state([game_event], last_game_state);
-      }
-      return last_game_state;
+      return game_events.reduce((last_game_state, game_event) => {
+        return phaseProjector[last_game_state.phase](game_event, last_game_state);
+      }, previous_game_state);
   }
 }
 
