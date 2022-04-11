@@ -1,5 +1,5 @@
 export const sbzInfectionHead = () => `<html><head><title>SBZ Infection</title>
-  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
   <link href="/defaults.css" rel="stylesheet" />
   <link href="/main.css" rel="stylesheet" />
 `;
