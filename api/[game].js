@@ -2,7 +2,14 @@ import { randomReference } from './_utils/references'
 import { events } from './_utils/game_projector'
 import { insertGameEvent } from './_utils/planetscale'
 import { project_from_planetscale } from './_utils/game_projector'
-import { readFile } from 'fs/promises'
+import {
+  sbzInfectionHead,
+  autoRefresh,
+  fadeMessage,
+  playerList,
+  gameForm,
+  textInput,
+} from './_utils/simple_html'
 
 export default async (req, res) => {
   // TODO: DRY player finding?
@@ -28,29 +35,24 @@ export default async (req, res) => {
     }
   }
 
-  const projection = project_from_planetscale(req.query.game);
-  const head_template = readFile(`${__dirname}/_templates/head.html`);
-  const game_state = await projection;
-
-  const player_list = Object.values(game_state['players']).map((nickname) => `<li>${nickname}</li>`).join('');
+  const game_state = await project_from_planetscale(req.query.game);
 
   if (player in game_state['players']) {
     res.status(200);
     res.send(
-      (await head_template).toString() +
-      '<meta http-equiv="refresh" content="7">' +
-      '<section class="fade-message"><h1>Waiting for players to join...</h1></section>' +
-      '<h2>Players:</h2>' +
-      `<ul>${player_list}</ul>` +
-      `<form method="post"><input type="hidden" name="type" value="${events.BEGIN_GAME}" /><input type="submit" value="Ready" /></form>`
+      sbzInfectionHead() +
+      autoRefresh(7) +
+      fadeMessage('Waiting for players to join...') +
+      playerList(game_state['players']) +
+      gameForm([], events.BEGIN_GAME, "Ready")
     );
   } else {
     res.status(200);
     res.setHeader('Set-Cookie', `SbzPlayerRef=${player}; HttpOnly`);
     res.send(
-      (await head_template).toString() +
-      '<meta http-equiv="refresh" content="7">' +
-      `<form method="post"><label>Nickname:<input type="text" name="nickname" /></label><input type="hidden" name="type" value="${events.JOIN_GAME}" /><input type="submit" value="Join" /></form>`
+      sbzInfectionHead() +
+      playerList(game_state['players']) +
+      gameForm([textInput("Nickname:", "nickname")], events.JOIN_GAME, "Ready")
     );
   }
 };
