@@ -4,7 +4,7 @@ import {
   fadeMessage,
   playerList,
   gameForm,
-} from './_utils/simple_html'
+} from '../_utils/simple_html'
 
 export default function(game_state) {
   return sbzInfectionHead() +
