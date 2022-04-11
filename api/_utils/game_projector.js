@@ -86,33 +86,37 @@ const phaseProjector = {
     }
   },
   [phases.SETUP]: (game_event, previous_game_state) => {
+    const config = {
+      hivemind: game_event.data.hivemind,
+      config: {
+        infected_count: game_event.data.infected_count,
+        task_count: game_event.data.task_count,
+        majority_vote_elimination: game_event.data.majority_vote_elimination,
+      }
+    };
+    const phase = config['hivemind'] && Object.values(config['config']).every((i) => i) ? phases.SETUP : phases.INFECTING;
     switch(game_event.type) {
       case events.SET_CONFIG:
         return {
           ...previous_game_state,
-          phase: phases.INFECTING,
-          hivemind: game_event.data.hivemind,
-          config: {
-            infected_count: game_event.data.infected_count,
-            task_count: game_event.data.task_count,
-            majority_vote_elimination: game_event.data.majority_vote_elimination,
-          }
+          phase: phase,
+          ...config,
         };
       default:
         return previous_game_state;
     }
   },
   [phases.INFECTING]: (game_event, previous_game_state) => {
+    let phase;
+    let infected = previous_game_state.infected;
+    if(infected.length < previous_game_state.config.infected_count) {
+      infected[infected.length] = game_event.data.infected;
+      phase = phases.INFECTING;
+    } else {
+      phase = phases.VICTORY; // TODO: should go to DAY_PLANNING
+    }
     switch(game_event.type) {
       case events.CHOOSE_INFECTED:
-        let phase;
-        let infected = previous_game_state.infected;
-        if(infected.length < previous_game_state.config.infected_count) {
-          infected[infected.length] = game_event.data.infected;
-          phase = phases.INFECTING;
-        } else {
-          phase = phases.DAY_PLANNING;
-        }
         return {
           ...previous_game_state,
           infected,
@@ -142,6 +146,12 @@ const phaseProjector = {
   },
   [phases.VICTORY]: (game_event, previous_game_state) => {
     switch(game_event.type) {
+      case events.NEW_GAME:
+        return {
+          ...previous_game_state,
+          phase: phases.JOINING,
+          infected: [],
+        };
       default:
         return previous_game_state;
     }

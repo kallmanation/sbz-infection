@@ -38,7 +38,7 @@ export default async (req, res) => {
           hivemind: req.body.hivemind,
           infected_count: req.body.infectedcount,
           task_count: req.body.taskcount,
-          majority_vote_elimination: req.body.majorityvoteelim,
+          majority_vote_elimination: req.body.majorityvoteelim === "true",
         });
         break;
       case events.CHOOSE_INFECTED:
@@ -46,6 +46,7 @@ export default async (req, res) => {
           ...common_data,
           infected: req.body.infected,
         });
+        break;
     }
     res.status(303);
     res.setHeader('Location', `/play/${game_ref}`);
