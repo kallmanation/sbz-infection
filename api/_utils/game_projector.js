@@ -87,12 +87,37 @@ const phaseProjector = {
   },
   [phases.SETUP]: (game_event, previous_game_state) => {
     switch(game_event.type) {
+      case events.SET_CONFIG:
+        return {
+          ...previous_game_state,
+          phase: phases.INFECTING,
+          hivemind: game_event.data.hivemind,
+          config: {
+            infected_count: game_event.data.infected_count,
+            task_count: game_event.data.task_count,
+            majority_vote_elimination: game_event.data.majority_vote_elimination,
+          }
+        };
       default:
         return previous_game_state;
     }
   },
   [phases.INFECTING]: (game_event, previous_game_state) => {
     switch(game_event.type) {
+      let phase;
+      let infected = previous_game_state.infected;
+      if(infected.length < previous_game_state.config.infected_count) {
+        infected[infected.length] = game_event.data.infected;
+        phase = phases.INFECTING;
+      } else {
+        phase = phases.DAY_PLANNING;
+      }
+      case events.CHOOSE_INFECTED:
+        return {
+          ...previous_game_state,
+          infected,
+          phase,
+        };
       default:
         return previous_game_state;
     }
