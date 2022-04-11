@@ -46,7 +46,7 @@ export function project_game_state(game_events, previous_game_state = default_ga
     case 1:
       return phaseProjector[previous_game_state.phase](game_events[0], previous_game_state);
     default:
-      last_game_state = previous_game_state;
+      let last_game_state = previous_game_state;
       for (const game_event in game_events) {
         last_game_state = project_game_state([game_event], last_game_state);
       }
