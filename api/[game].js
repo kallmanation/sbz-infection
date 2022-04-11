@@ -1,11 +1,28 @@
 import { randomReference } from './_utils/references'
 import { events } from './_utils/game_projector'
+import { insertGameEvent } from './_utils/planetscale'
 import { project_from_planetscale } from './_utils/game_projector'
 import { readFile } from 'fs/promises'
 
 export default async (req, res) => {
   // TODO: DRY player finding?
   const player = req.cookies.SbzPlayerRef || randomReference();
+
+  if (req.body.type) {
+    switch(req.body.type) {
+      case events.JOIN_GAME:
+        await insertGameEvent({
+          randomReference(),
+          game_ref: req.query.game,
+          type: req.body.type,
+          sent_by: player,
+          nickname: req.body.nickname,
+        });
+        return;
+      case events.BEGIN_GAME:
+        return;
+    }
+  }
 
   const projection = project_from_planetscale(req.query.game);
   const head_template = readFile(`${__dirname}/_templates/head.html`);
@@ -29,6 +46,9 @@ export default async (req, res) => {
   } else {
     res.status(200);
     res.setHeader('Set-Cookie', `SbzPlayerRef=${player}; HttpOnly`);
-    res.send('I do not recognize you. Have a cookie.');
+    res.send(
+      (await game_form_template).toString() +
+      `<game-form><div slot="inputs"><label>Nickname:<input type="text" /></label><input type="text"<input type="hidden" name="type" value="${events.JOIN_GAME}" /></div><span slot="submit">Ready</span></game-form>`
+    );
   }
 };

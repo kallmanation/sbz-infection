@@ -7,7 +7,7 @@ export default async (req, res) => {
   const player = req.cookies.SbzPlayerRef || randomReference();
   const ref = randomReference()
 
-  const [rows, fields] = await insertGameEvent({
+  await insertGameEvent({
     ref,
     game_ref: ref,
     type: events.NEW_GAME,
