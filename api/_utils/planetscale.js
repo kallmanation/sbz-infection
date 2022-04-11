@@ -1,4 +1,4 @@
-const mysql = require('mysql2/promise')
+import mysql from 'mysql2/promise'
 
 export const createConnection = async () => await mysql.createConnection(
   `mysql://${process.env.PLANETSCALE_DB_USERNAME}:${process.env.PLANETSCALE_DB_PASSWORD}@${process.env.PLANETSCALE_DB_HOST}/${process.env.PLANETSCALE_DB}?ssl={"rejectUnauthorized":true}`

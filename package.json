@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "dependencies": {
     "mysql2": "^2.3.3"
   }

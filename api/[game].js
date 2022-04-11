@@ -53,8 +53,9 @@ export default async (req, res) => {
     res.send(`Redirecting to /play/${game_ref}`);
   } else {
     const game_state = await project_from_planetscale(req.query.game);
+    const scene = render(game_state, player);
     res.status(200);
     res.setHeader('Set-Cookie', `SbzPlayerRef=${player}; HttpOnly`);
-    res.send(render(game_state, player));
+    res.send(await scene);
   }
 };

@@ -104,15 +104,15 @@ const phaseProjector = {
   },
   [phases.INFECTING]: (game_event, previous_game_state) => {
     switch(game_event.type) {
-      let phase;
-      let infected = previous_game_state.infected;
-      if(infected.length < previous_game_state.config.infected_count) {
-        infected[infected.length] = game_event.data.infected;
-        phase = phases.INFECTING;
-      } else {
-        phase = phases.DAY_PLANNING;
-      }
       case events.CHOOSE_INFECTED:
+        let phase;
+        let infected = previous_game_state.infected;
+        if(infected.length < previous_game_state.config.infected_count) {
+          infected[infected.length] = game_event.data.infected;
+          phase = phases.INFECTING;
+        } else {
+          phase = phases.DAY_PLANNING;
+        }
         return {
           ...previous_game_state,
           infected,
