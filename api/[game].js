@@ -1,8 +1,8 @@
-import { randomReference } from './_utils/references'
-import { events } from './_utils/game_projector'
-import { insertGameEvent } from './_utils/planetscale'
-import { project_from_planetscale } from './_utils/game_projector'
-import render from './_scenes/render'
+import { randomReference } from './_utils/references.js'
+import { events } from './_utils/game_projector.js'
+import { insertGameEvent } from './_utils/planetscale.js'
+import { project_from_planetscale } from './_utils/game_projector.js'
+import render from './_scenes/render.js'
 
 export default async (req, res) => {
   const player = req.cookies.SbzPlayerRef || randomReference();

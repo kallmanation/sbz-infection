@@ -1,4 +1,4 @@
-import { selectGameEventsForGameRef } from './planetscale'
+import { selectGameEventsForGameRef } from './planetscale.js'
 
 export const events = {
   NEW_GAME: 'new_game',
