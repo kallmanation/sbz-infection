@@ -94,7 +94,7 @@ const phaseProjector = {
         majority_vote_elimination: game_event.data.majority_vote_elimination,
       }
     };
-    const phase = config['hivemind'] && Object.values(config['config']).every((i) => i) ? phases.SETUP : phases.INFECTING;
+    const phase = config['hivemind'] && Object.values(config['config']).every((i) => i) ? phases.INFECTING : phases.SETUP;
     switch(game_event.type) {
       case events.SET_CONFIG:
         return {
@@ -108,9 +108,9 @@ const phaseProjector = {
   },
   [phases.INFECTING]: (game_event, previous_game_state) => {
     let phase;
-    let infected = previous_game_state.infected;
-    if(infected.length < previous_game_state.config.infected_count) {
-      infected[infected.length] = game_event.data.infected;
+    let infected = previous_game_state.infected.filter((i) => i);
+    infected[infected.length] = game_event.data.infected;
+    if(infected.length < previous_game_state.config.infected_count - 1) {
       phase = phases.INFECTING;
     } else {
       phase = phases.VICTORY; // TODO: should go to DAY_PLANNING
