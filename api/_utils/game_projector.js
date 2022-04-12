@@ -110,7 +110,7 @@ const phaseProjector = {
     let phase;
     let infected = previous_game_state.infected.filter((i) => i);
     infected[infected.length] = game_event.data.infected;
-    if(infected.length < previous_game_state.config.infected_count - 1) {
+    if(infected.length < previous_game_state.config.infected_count) {
       phase = phases.INFECTING;
     } else {
       phase = phases.VICTORY; // TODO: should go to DAY_PLANNING
