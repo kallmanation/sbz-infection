@@ -9,6 +9,7 @@ function role(game_state, current_player) {
 }
 
 export default async function render(game_state, current_player) {
-  const { default: renderer } = require(`./${game_state.phase}/${role(game_state, current_player)}.js`);
-  return renderer(game_state);
+  const phaserole = `${game_state.phase}/${role(game_state, current_player)}`
+  const { default: renderer } = require(`./${phaserole}.js`);
+  return renderer(game_state) + `<!-- ${phaserole} />`;
 }
