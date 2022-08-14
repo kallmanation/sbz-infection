@@ -10,7 +10,8 @@ import {
 export default function(game_state) {
   const [scientists, infected, hivemind] = split_scientists_infected_and_hivemind(game_state)
   return sbzInfectionHead() +
-    fadeMessage('Thanks for playing...') +
+    fadeMessage(`${game_state.winner} wins...`) +
+    autoRefresh(30) +
     playerList(hivemind, "Hivemind:") +
     playerList(infected, "Infected:") +
     playerList(scientists, "Scientists:") +

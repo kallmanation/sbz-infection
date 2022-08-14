@@ -9,6 +9,7 @@ import {
 
 export default function(game_state) {
   return sbzInfectionHead() +
+  autoRefresh(30) +
   gameForm(
     [
       simpleSelect("Pick Hivemind:", "hivemind", game_state['players'], game_state['hivemind']),

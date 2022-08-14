@@ -22,6 +22,7 @@ const phases = {
 
 const default_game_state = {
   phase: phases.INIT,
+  winner: "No one",
   players: {},
   gamemaster: null,
   hivemind: null,
@@ -94,7 +95,7 @@ const phaseProjector = {
         majority_vote_elimination: game_event.data.majority_vote_elimination,
       }
     };
-    const phase = config['hivemind'] && Object.values(config['config']).every((i) => i) ? phases.INFECTING : phases.SETUP;
+    const phase = config['hivemind'] && Object.values(config['config']).every((i) => i != null) ? phases.INFECTING : phases.SETUP;
     switch(game_event.type) {
       case events.SET_CONFIG:
         return {
@@ -150,6 +151,7 @@ const phaseProjector = {
         return {
           ...previous_game_state,
           phase: phases.JOINING,
+          winner: "No one",
           infected: [],
         };
       default:

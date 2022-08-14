@@ -1,5 +1,5 @@
-import scientist from './scientist.js'
+import hivemind from './hivemind.js'
 
 export default function(game_state) {
-  return scientist(game_state);
+  return hivemind(game_state);
 }
